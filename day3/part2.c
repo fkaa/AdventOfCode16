@@ -3,8 +3,6 @@
 #include <immintrin.h>
 
 int main(int argc, char *argv[argc + 1]) {
-    const __m128i cmp_mask = _mm_set_epi32(0x0000000f, 0x0000000f, 0x0000000f, 0x00000000);
-
     __m128i triangles = _mm_set1_epi32(0);
     int nums[12] = {0};
     while (scanf(" %d %d %d\n"
