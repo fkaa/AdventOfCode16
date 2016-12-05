@@ -42,6 +42,15 @@ int main(int argc, char *argv[]) {
             }
 
         }
+
+        for (int i = 0; i < 8 && (n % 50000 == 0); ++i) {
+            if (filled & (1 << i)) {
+                printf("\x1b[32m%c", pwd[i]);
+            } else {
+                printf("\x1b[31m%c", hash[i]);
+            }
+        }
+        printf("\r");
     }
 
     printf("%s\n", pwd);
