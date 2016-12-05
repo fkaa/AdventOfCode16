@@ -9,21 +9,17 @@
 #  include <openssl/md5.h>
 #endif
 
-void md5(const char *str, int length, char out[static 8]) {
-    unsigned char digest[MD5_DIGEST_LENGTH];
-
-    MD5_CTX c;
-
-    MD5_Init(&c);
-    MD5_Update(&c, str, length);
-    MD5_Final(digest, &c);
-
-    snprintf(out, 8, "%02x%02x%02x%02x", digest[0], digest[1], digest[2], digest[3]);
+inline void md5(MD5_CTX *c, const char *str, int length, unsigned char out[static 17]) {
+    MD5_Init(c);
+    MD5_Update(c, str, length);
+    MD5_Final(out, c);
 }
 
 
 int main(int argc, char *argv[]) {
-    char hash[9] = {0};
+    MD5_CTX c;
+
+    unsigned char hash[17] = {0};
     char pwd[9] = {0};
     char input[64] = "wtnhxymk";
 
@@ -32,10 +28,10 @@ int main(int argc, char *argv[]) {
 
     while (cur != &pwd[8]) {
         int sz = snprintf(&input[8], 56, "%d", n++);
-        md5(input, 8 + sz, hash);
+        md5(&c, input, 8 + sz, hash);
 
-        if (!memcmp("00000", hash, 5)) {
-            *cur++ = hash[5];
+        if (!memcmp("\0\0", hash, 2) && hash[2] < 16) {
+            sprintf(cur++, "%01x", hash[2]);
         }
     }
 
